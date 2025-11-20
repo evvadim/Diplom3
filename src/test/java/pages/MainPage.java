@@ -5,6 +5,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+import java.util.Objects;
+
+import static java.lang.Thread.sleep;
+
 public class MainPage {
 
     private final WebDriver driver;
@@ -52,6 +57,10 @@ public class MainPage {
     public void clickAnchorButton(String string) {
         WebElement button = driver.findElement(anchorButtonNamed(string));
         clickAtElement(button);
+
+        while (isContainerScrolling(getIngredientsScrollContainer())) {
+        }
+
     }
 
     public WebElement getLoginButton() {
@@ -72,6 +81,46 @@ public class MainPage {
 
     public WebElement getAnchorHeaderNamed(String string) {
         return driver.findElement(anchorHeaderNamed(string));
+    }
+
+    public Boolean isContainerScrolling(WebElement element) {
+
+        Double lastScrollTop = getScrollTopValue(element);
+        try {
+            sleep(50);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return !lastScrollTop.equals(getScrollTopValue(element));
+
+    }
+
+    public Double getScrollTopValue(WebElement element) {
+
+        String value = Objects.requireNonNull(((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", element)).toString();
+        return Double.parseDouble(value);
+
+    }
+
+    public Double getHeightValue(WebElement element) {
+
+        String value = Objects.requireNonNull(((JavascriptExecutor) driver).executeScript("return arguments[0].scrollHeight;", element)).toString();
+        return Double.parseDouble(value);
+
+    }
+
+    public Double getTotalHeight(WebElement ofSubElements, int n) {
+
+        List<WebElement> elements = ofSubElements.findElements(By.xpath("./*"));
+        double total = 0.0;
+
+        for (int i = 0; i < (n - 1); i++) {
+            total += getHeightValue(elements.get(2 * i)) + 40 + 24;
+            total += getHeightValue(elements.get(2 * i + 1));
+        }
+
+        return total;
+
     }
 
 }

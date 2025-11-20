@@ -7,16 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import pages.MainPage;
 
-import java.util.List;
-import java.util.Objects;
-
-import static java.lang.Thread.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Parameterized.class)
@@ -56,7 +49,6 @@ public class ScrollToAnchorsTest {
 
         if (anchorNumber == 1) {
             mainPage.clickAnchorButton("Начинки");
-            sleep(1200);
         }
 
     }
@@ -67,10 +59,8 @@ public class ScrollToAnchorsTest {
 
         mainPage.clickAnchorButton(anchorName);
 
-        sleep(1200);
-
-        Double scrollTopValue = getScrollTopValue(mainPage.getIngredientsScrollContainer());
-        Double hideScrollTopValue = getTotalHeight(mainPage.getIngredientsScrollContainer(), anchorNumber);
+        Double scrollTopValue = mainPage.getScrollTopValue(mainPage.getIngredientsScrollContainer());
+        Double hideScrollTopValue = mainPage.getTotalHeight(mainPage.getIngredientsScrollContainer(), anchorNumber);
 
         assertThat("Конструктор прокрутился недостаточно", Math.abs(scrollTopValue - (hideScrollTopValue + 40)) < 4);
 
@@ -79,34 +69,6 @@ public class ScrollToAnchorsTest {
     @After
     public void tearDown() {
         driver.quit();
-    }
-
-    private Double getScrollTopValue(WebElement element) {
-
-        String value = Objects.requireNonNull(((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", element)).toString();
-        return Double.parseDouble(value);
-
-    }
-
-    private Double getHeightValue(WebElement element) {
-
-        String value = Objects.requireNonNull(((JavascriptExecutor) driver).executeScript("return arguments[0].scrollHeight;", element)).toString();
-        return Double.parseDouble(value);
-
-    }
-
-    private Double getTotalHeight(WebElement ofSubElements, int n) {
-
-        List<WebElement> elements = ofSubElements.findElements(By.xpath("./*"));
-        double total = 0.0;
-
-        for (int i = 0; i < (n - 1); i++) {
-            total += getHeightValue(elements.get(2 * i)) + 40 + 24;
-            total += getHeightValue(elements.get(2 * i + 1));
-        }
-
-        return total;
-
     }
 
 }
