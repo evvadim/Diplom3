@@ -1,24 +1,18 @@
 import api.CreateUserViaApi;
 import api.DeleteUserViaApi;
 import api.data.UserDataRequest;
-import browser.AvailableBrowsers;
 import browser.Browser;
 import browser.BrowserFactory;
+import config.Config;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.ForgotPassword;
 import pages.LoginPage;
 import pages.MainPage;
 import pages.RegisterPage;
-
-import java.time.Duration;
 
 import static config.Config.*;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -27,8 +21,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class LoginButtonsTest {
 
     private WebDriver driver;
-    private final Browser browser = new BrowserFactory().prepareBrowserNamed(AvailableBrowsers.CHROME);
+    private final Browser browser = new BrowserFactory().prepareBrowserNamed(Config.getBrowser());
     private String accessToken;
+    private LoginPage loginPage;
 
     @Before
     public void setUp() {
@@ -53,7 +48,7 @@ public class LoginButtonsTest {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickLoginButton();
 
-        String accessToken = loginProcess(driver);
+        String accessToken = new LoginPage(driver).loginProcess();
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
 
@@ -67,7 +62,7 @@ public class LoginButtonsTest {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickAccountButton();
 
-        String accessToken = loginProcess(driver);
+        String accessToken = new LoginPage(driver).loginProcess();
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
 
@@ -81,7 +76,7 @@ public class LoginButtonsTest {
         RegisterPage registerPage = new RegisterPage(driver);
         registerPage.clickLoginButton();
 
-        String accessToken = loginProcess(driver);
+        String accessToken = new LoginPage(driver).loginProcess();
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
 
@@ -95,24 +90,9 @@ public class LoginButtonsTest {
         ForgotPassword forgotPassword = new ForgotPassword(driver);
         forgotPassword.clickLoginButton();
 
-        String accessToken = loginProcess(driver);
+        String accessToken = new LoginPage(driver).loginProcess();
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
-
-    }
-
-    // вспомогательный метод авторизации
-    String loginProcess(WebDriver driver) {
-
-        LoginPage loginPage = new LoginPage(driver);
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(loginPage.getLoginHeader()));
-
-        loginPage.fillEmail(getEmail());
-        loginPage.fillPassword(getUserPassword());
-        loginPage.clickLoginButton();
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//a[@class='BurgerIngredient_ingredient__1TVf6 ml-4 mr-4 mb-8']")));
-
-        return (String) ((JavascriptExecutor) driver).executeScript("return window.localStorage.getItem('accessToken');");
 
     }
 

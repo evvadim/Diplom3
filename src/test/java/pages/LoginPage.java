@@ -4,6 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static config.Config.getEmail;
+import static config.Config.getUserPassword;
 
 public class LoginPage {
 
@@ -66,7 +73,19 @@ public class LoginPage {
         clickAtElement(button);
     }
 
+    // вспомогательный метод авторизации
+    public String loginProcess() {
 
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(getLoginHeader()));
+
+        fillEmail(getEmail());
+        fillPassword(getUserPassword());
+        clickLoginButton();
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//a[@class='BurgerIngredient_ingredient__1TVf6 ml-4 mr-4 mb-8']")));
+
+        return (String) ((JavascriptExecutor) driver).executeScript("return window.localStorage.getItem('accessToken');");
+
+    }
 
     public WebElement getLoginHeader() {
         return driver.findElement(loginHeader);
