@@ -1,6 +1,6 @@
-import browser.AvailableBrowsers;
 import browser.Browser;
 import browser.BrowserFactory;
+import config.Config;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +14,6 @@ import pages.RegisterPage;
 
 import java.time.Duration;
 
-import static browser.AvailableBrowsers.*;
 import static config.Config.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -25,33 +24,31 @@ public class PasswordFieldValidationParamTests {
 
     private final String password;
     private final boolean isValid;
-    private final AvailableBrowsers browserDriver;
 
     private final int minLength = 6;
+    private final String browser = Config.getBrowser();
 
-    public PasswordFieldValidationParamTests(String password, AvailableBrowsers availableBrowsers) {
+    public PasswordFieldValidationParamTests(String password) {
         this.password = password;
-        this.browserDriver = availableBrowsers;
-
         this.isValid = password.length() >= minLength;
     }
 
     @Parameterized.Parameters(name = "Testing validation password field. Set `{0}`")
     public static Object[][] getPasswords() {
         return new Object[][] {
-                {getUserPassword().substring(0, 2), CHROME},
-                {getUserPassword().substring(0, 4), CHROME},
-                {getUserPassword().substring(0, 5), CHROME},
-                {getUserPassword().substring(0, 6), CHROME},
-                {getUserPassword().substring(0, 7), CHROME},
-                {getUserPassword().substring(0, 9), CHROME},
+                {getUserPassword().substring(0, 2)},
+                {getUserPassword().substring(0, 4)},
+                {getUserPassword().substring(0, 5)},
+                {getUserPassword().substring(0, 6)},
+                {getUserPassword().substring(0, 7)},
+                {getUserPassword().substring(0, 9)},
         };
     }
 
     @Before
     public void setUp() {
 
-        Browser browser = new BrowserFactory().prepareBrowserNamed(browserDriver);
+        Browser browser = new BrowserFactory().prepareBrowserNamed(this.browser);
         browser.driverManagerSetup();
         driver = browser.getNewDriver();
 

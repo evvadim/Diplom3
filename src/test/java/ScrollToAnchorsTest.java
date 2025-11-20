@@ -1,4 +1,3 @@
-import browser.AvailableBrowsers;
 import browser.Browser;
 import browser.BrowserFactory;
 import config.Config;
@@ -24,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ScrollToAnchorsTest {
 
     private WebDriver driver;
-    private final Browser browser = new BrowserFactory().prepareBrowserNamed(AvailableBrowsers.CHROME);
+    private final Browser browser = new BrowserFactory().prepareBrowserNamed(Config.getBrowser());
 
     private final String anchorName;
     private final int anchorNumber;

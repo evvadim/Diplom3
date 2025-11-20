@@ -2,9 +2,9 @@ package browser;
 
 public class BrowserFactory {
 
-    public Browser prepareBrowserNamed(AvailableBrowsers browserName) {
+    public Browser prepareBrowserNamed(String browserName) {
 
-        switch (browserName.toString().toLowerCase()) {
+        switch (browserName.toLowerCase()) {
             case "chrome": {
                 return new Chrome();
             }
@@ -12,7 +12,7 @@ public class BrowserFactory {
                 return new Yandex();
             }
             default:
-                throw new IllegalStateException("Unexpected browser name: " + browserName.toString().toLowerCase());
+                throw new IllegalStateException("Unexpected browser name: " + browserName.toLowerCase());
         }
 
     }

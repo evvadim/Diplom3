@@ -15,11 +15,13 @@ public class Config {
     private static final String userPassword;
     private static final String userName;
 
+    private static final String browser;
+
     static {
 
         Properties properties = new Properties();
         try {
-            properties.load(new FileReader("src/test/java/config/resources.properties"));
+            properties.load(new FileReader("src/test/java/config/resource.properties"));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -32,6 +34,8 @@ public class Config {
         email = properties.getProperty("email");
         userPassword = properties.getProperty("userPassword");
         userName = properties.getProperty("userName");
+
+        browser = properties.getProperty("browser");
 
     }
 
@@ -62,6 +66,10 @@ public class Config {
 
     public static String getUserName() {
         return userName;
+    }
+
+    public static String getBrowser() {
+        return browser;
     }
 
 }

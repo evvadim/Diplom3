@@ -1,8 +1,8 @@
-import browser.AvailableBrowsers;
 import browser.Browser;
 import browser.BrowserFactory;
 import api.DeleteUserViaApi;
 import api.LoginUserViaApi;
+import config.Config;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class RegisterUserTests {
 
     private WebDriver driver;
-    private final Browser browser = new BrowserFactory().prepareBrowserNamed(AvailableBrowsers.CHROME);
+    private final Browser browser = new BrowserFactory().prepareBrowserNamed(Config.getBrowser());
     private String accessToken;
 
 
