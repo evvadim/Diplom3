@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -21,6 +22,7 @@ public class ForgotPassword {
         button.click();
     }
 
+    @Step("Click Login button")
     public void clickLoginButton() {
         WebElement button = driver.findElement(loginButton);
         clickAtElement(button);

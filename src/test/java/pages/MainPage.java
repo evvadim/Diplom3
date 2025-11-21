@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -44,16 +45,19 @@ public class MainPage {
         button.click();
     }
 
+    @Step("Click Login button")
     public void clickLoginButton() {
         WebElement button = driver.findElement(loginButton);
         clickAtElement(button);
     }
 
+    @Step("Click Account button")
     public void clickAccountButton() {
         WebElement button = driver.findElement(accountButton);
         clickAtElement(button);
     }
 
+    @Step("Click Anchor button and check until the container stop scrolling")
     public void clickAnchorButton(String string) {
         WebElement button = driver.findElement(anchorButtonNamed(string));
         clickAtElement(button);
@@ -85,30 +89,36 @@ public class MainPage {
 
     public Boolean isContainerScrolling(WebElement element) {
 
-        Double lastScrollTop = getScrollTopValue(element);
+        Double lastScrollTop = getScrollTopValueHelper(element);
         try {
             sleep(50);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return !lastScrollTop.equals(getScrollTopValue(element));
+        return !lastScrollTop.equals(getScrollTopValueHelper(element));
 
     }
 
+    @Step("Get Scroll Top value")
     public Double getScrollTopValue(WebElement element) {
 
-        String value = Objects.requireNonNull(((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", element)).toString();
-        return Double.parseDouble(value);
+        return getScrollTopValueHelper(element);
 
     }
 
-    public Double getHeightValue(WebElement element) {
+    private Double getScrollTopValueHelper(WebElement element) {
+        String value = Objects.requireNonNull(((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", element)).toString();
+        return Double.parseDouble(value);
+    }
+
+    private Double getHeightValue(WebElement element) {
 
         String value = Objects.requireNonNull(((JavascriptExecutor) driver).executeScript("return arguments[0].scrollHeight;", element)).toString();
         return Double.parseDouble(value);
 
     }
 
+    @Step("Calculate total Height of scrolled Container items")
     public Double getTotalHeight(WebElement ofSubElements, int n) {
 
         List<WebElement> elements = ofSubElements.findElements(By.xpath("./*"));

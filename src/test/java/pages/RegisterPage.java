@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -34,39 +35,45 @@ public class RegisterPage {
     }
 
     // вспомагательный метод заполнения текстовых полей
-    public void fillInputTextAt(By locator, String inputText) {
+    private void fillInputTextAt(By locator, String inputText) {
         WebElement input = driver.findElement(locator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", input);
         input.sendKeys(inputText);
     }
 
-    public void clickAtElement(WebElement button) {
+    private void clickAtElement(WebElement button) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", button);
         button.click();
     }
 
+    @Step("Fill Name field")
     public void fillName(String string) {
         fillInputTextAt(nameField, string);
     }
 
+    @Step("Fill email field")
     public void fillEmail(String string) {
         fillInputTextAt(emailField, string);
     }
 
+    @Step("Fill Password field")
     public void fillPassword(String string) {
         fillInputTextAt(passwordField, string);
     }
 
+    @Step("Click Name field")
     public void clickNameField() {
         WebElement field = driver.findElement(nameField);
         clickAtElement(field);
     }
 
+    @Step("Click Register button")
     public void clickRegisterButton() {
         WebElement button = driver.findElement(registerButton);
         clickAtElement(button);
     }
 
+    @Step("Click Login button")
     public void clickLoginButton() {
         WebElement button = driver.findElement(loginButton);
         clickAtElement(button);

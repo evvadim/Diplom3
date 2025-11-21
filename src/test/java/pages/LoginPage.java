@@ -1,6 +1,7 @@
 package pages;
 
 import api.data.UserDataRequest;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -37,41 +38,47 @@ public class LoginPage {
     }
 
     // вспомагательный метод заполнения текстовых полей
-    public void fillInputTextAt(By locator, String inputText) {
+    private void fillInputTextAt(By locator, String inputText) {
         WebElement input = driver.findElement(locator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", input);
         input.sendKeys(inputText);
     }
 
-    public void clickAtElement(WebElement button) {
+    private void clickAtElement(WebElement button) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", button);
         button.click();
     }
 
+    @Step("Fill Email field")
     public void fillEmail(String string) {
         fillInputTextAt(emailField, string);
     }
 
+    @Step("Fill Password field")
     public void fillPassword(String string) {
         fillInputTextAt(passwordField, string);
     }
 
+    @Step("Click Login button")
     public void clickLoginButton() {
         WebElement button = driver.findElement(loginButton);
         clickAtElement(button);
     }
 
+    @Step("Click Register button")
     public void clickRegisterButton() {
         WebElement button = driver.findElement(registerButton);
         clickAtElement(button);
     }
 
+    @Step("Click Forgot Password button")
     public void clickForgotPasswordButton() {
         WebElement button = driver.findElement(forgotPasswordButton);
         clickAtElement(button);
     }
 
     // вспомогательный метод авторизации
+    @Step("Authorize account")
     public String loginProcess(UserDataRequest loginDataRequest) {
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(getLoginHeader()));
