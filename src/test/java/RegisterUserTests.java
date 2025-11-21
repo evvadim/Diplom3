@@ -4,6 +4,7 @@ import api.DeleteUserViaApi;
 import api.LoginUserViaApi;
 import config.Config;
 import io.qameta.allure.junit4.DisplayName;
+import net.datafaker.Faker;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,21 +37,26 @@ public class RegisterUserTests {
     }
 
     @Test
-    @DisplayName("Test register user. Browser: Chrome")
+    @DisplayName("Test register user.")
     public void createUserViaRegisterForm() {
+
+        Faker faker = new Faker();
+        String name = faker.name().name();
+        String email = faker.internet().emailAddress();
+        String password = faker.internet().password(12, 14, true);
 
         driver.get(String.format("%s%s", getBaseURI(), getRegisterPath()));
 
         RegisterPage registerPage = new RegisterPage(driver);
-        registerPage.fillName(getUserName());
-        registerPage.fillEmail(getEmail());
-        registerPage.fillPassword(getUserPassword());
+        registerPage.fillName(name);
+        registerPage.fillEmail(email);
+        registerPage.fillPassword(password);
         registerPage.clickRegisterButton();
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(new LoginPage(driver).getLoginHeader()));
 
         // авторизируемся через API
-        LoginUserViaApi loginUserViaApi = new LoginUserViaApi(getEmail(), getUserPassword());
+        LoginUserViaApi loginUserViaApi = new LoginUserViaApi(email, password);
         accessToken = loginUserViaApi.fetchAccessToken();
 
         assertThat("Логин неуспешен", accessToken, notNullValue());

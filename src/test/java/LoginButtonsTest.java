@@ -5,6 +5,7 @@ import browser.Browser;
 import browser.BrowserFactory;
 import config.Config;
 import io.qameta.allure.junit4.DisplayName;
+import net.datafaker.Faker;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,15 +23,20 @@ public class LoginButtonsTest {
 
     private WebDriver driver;
     private final Browser browser = new BrowserFactory().prepareBrowserNamed(Config.getBrowser());
+    UserDataRequest createUserRequest;
     private String accessToken;
     private LoginPage loginPage;
 
     @Before
     public void setUp() {
 
+        Faker faker = new Faker();
+        String email = faker.internet().emailAddress();
+        String password = faker.internet().password(12, 14, true);
+        String name = faker.name().name();
         // создадим пользователя через API
 
-        UserDataRequest createUserRequest = new UserDataRequest(getEmail(), getUserPassword(), getUserName());
+        createUserRequest = new UserDataRequest(email, password, name);
         CreateUserViaApi createUserViaApi = new CreateUserViaApi(createUserRequest);
         accessToken = createUserViaApi.fetchAccessToken();
 
@@ -48,7 +54,7 @@ public class LoginButtonsTest {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickLoginButton();
 
-        String accessToken = new LoginPage(driver).loginProcess();
+        String accessToken = new LoginPage(driver).loginProcess(createUserRequest);
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
 
@@ -62,7 +68,7 @@ public class LoginButtonsTest {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickAccountButton();
 
-        String accessToken = new LoginPage(driver).loginProcess();
+        String accessToken = new LoginPage(driver).loginProcess(createUserRequest);
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
 
@@ -76,7 +82,7 @@ public class LoginButtonsTest {
         RegisterPage registerPage = new RegisterPage(driver);
         registerPage.clickLoginButton();
 
-        String accessToken = new LoginPage(driver).loginProcess();
+        String accessToken = new LoginPage(driver).loginProcess(createUserRequest);
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
 
@@ -90,7 +96,7 @@ public class LoginButtonsTest {
         ForgotPassword forgotPassword = new ForgotPassword(driver);
         forgotPassword.clickLoginButton();
 
-        String accessToken = new LoginPage(driver).loginProcess();
+        String accessToken = new LoginPage(driver).loginProcess(createUserRequest);
 
         assertThat("Авторизация не пройдена, `accessToken` не получен", accessToken, notNullValue());
 

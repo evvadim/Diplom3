@@ -2,6 +2,7 @@ import browser.Browser;
 import browser.BrowserFactory;
 import config.Config;
 import io.qameta.allure.junit4.DisplayName;
+import net.datafaker.Faker;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,20 +29,20 @@ public class PasswordFieldValidationParamTests {
     private final int minLength = 6;
     private final String browser = Config.getBrowser();
 
-    public PasswordFieldValidationParamTests(String password) {
-        this.password = password;
+    public PasswordFieldValidationParamTests(int passwordLength) {
+        this.password = new Faker().internet().password(passwordLength, passwordLength, true);
         this.isValid = password.length() >= minLength;
     }
 
-    @Parameterized.Parameters(name = "Testing validation password field. Set `{0}`")
+    @Parameterized.Parameters(name = "Testing validation password field. Password length `{0}`")
     public static Object[][] getPasswords() {
         return new Object[][] {
-                {getUserPassword().substring(0, 2)},
-                {getUserPassword().substring(0, 4)},
-                {getUserPassword().substring(0, 5)},
-                {getUserPassword().substring(0, 6)},
-                {getUserPassword().substring(0, 7)},
-                {getUserPassword().substring(0, 9)},
+                {2},
+                {4},
+                {5},
+                {6},
+                {7},
+                {9},
         };
     }
 

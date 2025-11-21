@@ -1,5 +1,6 @@
 package pages;
 
+import api.data.UserDataRequest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -8,9 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-
-import static config.Config.getEmail;
-import static config.Config.getUserPassword;
 
 public class LoginPage {
 
@@ -74,12 +72,12 @@ public class LoginPage {
     }
 
     // вспомогательный метод авторизации
-    public String loginProcess() {
+    public String loginProcess(UserDataRequest loginDataRequest) {
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(getLoginHeader()));
 
-        fillEmail(getEmail());
-        fillPassword(getUserPassword());
+        fillEmail(loginDataRequest.getEmail());
+        fillPassword(loginDataRequest.getPassword());
         clickLoginButton();
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//a[@class='BurgerIngredient_ingredient__1TVf6 ml-4 mr-4 mb-8']")));
 
