@@ -39,7 +39,7 @@ public class ScrollToAnchorsTest {
     }
 
     @Before
-    public void setUp() throws InterruptedException {
+    public void setUp() {
 
         browser.driverManagerSetup();
         driver = browser.getNewDriver();
@@ -55,7 +55,7 @@ public class ScrollToAnchorsTest {
 
     @Test
     @DisplayName("Test Constructor scroll to Anchor")
-    public void scrollToAnchorTests() throws InterruptedException {
+    public void scrollToAnchorTests() {
 
         mainPage.clickAnchorButton(anchorName);
 
