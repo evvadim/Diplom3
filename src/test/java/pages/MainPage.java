@@ -91,7 +91,7 @@ public class MainPage {
 
         Double lastScrollTop = getScrollTopValueHelper(element);
         try {
-            sleep(50);
+            sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

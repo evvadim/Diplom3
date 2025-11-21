@@ -62,7 +62,7 @@ public class ScrollToAnchorsTest {
         Double scrollTopValue = mainPage.getScrollTopValue(mainPage.getIngredientsScrollContainer());
         Double hideScrollTopValue = mainPage.getTotalHeight(mainPage.getIngredientsScrollContainer(), anchorNumber);
 
-        assertThat("Конструктор прокрутился недостаточно", Math.abs(scrollTopValue - (hideScrollTopValue + 40)) < 4);
+        assertThat("Страница конструктора прокрутилась недостаточно", Math.abs(scrollTopValue - (hideScrollTopValue + 40)) < 4);
 
     }
 
